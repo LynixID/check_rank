@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hotel Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body class="bg-gray-100 font-sans">
+    <div class="flex h-screen overflow-hidden">
+      <!-- Sidebar -->
+      <div class="hidden md:flex md:flex-shrink-0">
+        <div class="flex flex-col w-64 bg-blue-800 text-white">
+          <div class="flex items-center justify-center h-16 px-4 bg-blue-900">
+            <span class="text-xl font-semibold">Hotel Vista</span>
+          </div>
+          <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
+            <nav class="flex-1 space-y-2">
+              <a
+                href="#"
+                data-section="dashboard"
+                class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-md bg-blue-700 text-white"
+              >
+                <i class="fas fa-tachometer-alt mr-3"></i>
+                Dashboard
+              </a>
+              <a
+                href="#"
+                data-section="users"
+                class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-blue-700 text-white"
+              >
+                <i class="fas fa-users mr-3"></i>
+                Users
+              </a>
+              <a
+                href="#"
+                data-section="billing"
+                class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-blue-700 text-white"
+              >
+                <i class="fas fa-chart-bar mr-3"></i>
+                Billing
+              </a>
+              <a
+                href="#"
+                data-section="settings"
+                class="sidebar-link flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-blue-700 text-white"
+              >
+                <i class="fas fa-cog mr-3"></i>
+                Settings
+              </a>
+            </nav>
+          </div>
+          <div class="p-4 border-t border-blue-700">
+            <div class="flex items-center mb-3">
+              <img
+                class="w-10 h-10 rounded-full"
+                src="https://randomuser.me/api/portraits/lego/1.jpg"
+                alt="User"
+              />
+              <div class="ml-3">
+                <p class="text-sm font-medium">{{ request.user.username }}</p>
+                <p class="text-xs text-blue-200">
+                  {{ request.user.role|title }}
+                </p>
+              </div>
+            </div>
+            <a
+              href="{% url 'logout' %}"
+              class="flex items-center justify-center w-full bg-red-600 hover:bg-red-700 text-white text-sm font-medium py-2 rounded-md transition duration-200"
+            >
+              <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section Setiap Konten -->
+      <main class="flex-1 overflow-y-auto p-6 bg-gray-100">
+        <!-- Section Dashboard -->
+        <section id="dashboard" class="content-section">
+          <div class="flex flex-col flex-1 overflow-hidden">
+            <header
+              class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200"
+            >
+              <div class="flex items-center">
+                <button class="md:hidden text-gray-500 focus:outline-none">
+                  <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="text-xl font-semibold text-gray-800 ml-4">
+                  Dashboard
+                </h1>
+              </div>
+              <div class="flex items-center space-x-4">
+                <button class="text-gray-500 focus:outline-none">
+                  <i class="fas fa-bell"></i>
+                </button>
+                <button class="text-gray-500 focus:outline-none">
+                  <i class="fas fa-envelope"></i>
+                </button>
+                <div class="relative">
+                  <button class="flex items-center focus:outline-none">
+                    <img
+                      class="w-8 h-8 rounded-full"
+                      src="https://randomuser.me/api/portraits/lego/1.jpg"
+                      alt="User"
+                    />
+                  </button>
+                </div>
+              </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-6 bg-gray-100">
+              <div
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6"
+              >
+                <!-- Total Users -->
+                <div class="bg-white rounded-lg shadow p-6">
+                  <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                      <i class="fas fa-users text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                      <p class="text-sm font-medium text-gray-500">
+                        Total Users
+                      </p>
+                      <p class="text-2xl font-semibold text-gray-800">
+                        {{ total_users }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <!-- Total Pembayaran Sukses -->
+                <div class="bg-white rounded-lg shadow p-6">
+                  <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100 text-green-600">
+                      <i class="fas fa-money-check-alt text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                      <p class="text-sm font-medium text-gray-500">
+                        Pembayaran Sukses
+                      </p>
+                      <p class="text-2xl font-semibold text-gray-800">
+                        {{ total_pembayaran_sukses }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <!-- Total Pencarian Keyword -->
+                <div class="bg-white rounded-lg shadow p-6">
+                  <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                      <i class="fas fa-search text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                      <p class="text-sm font-medium text-gray-500">
+                        Total Pencarian
+                      </p>
+                      <p class="text-2xl font-semibold text-gray-800">
+                        {{ total_rank }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </main>
+          </div>
+        </section>
+
+        <!-- Section Users -->
+        <section id="users" class="content-section hidden">
+          <header
+            class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200"
+          >
+            <div class="flex items-center">
+              <button class="md:hidden text-gray-500 focus:outline-none">
+                <i class="fas fa-bars"></i>
+              </button>
+              <h1 class="text-xl font-semibold text-gray-800 ml-4">Users</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+              <button class="text-gray-500 focus:outline-none">
+                <i class="fas fa-bell"></i>
+              </button>
+              <button class="text-gray-500 focus:outline-none">
+                <i class="fas fa-envelope"></i>
+              </button>
+              <div class="relative">
+                <button class="flex items-center focus:outline-none">
+                  <img
+                    class="w-8 h-8 rounded-full"
+                    src="https://randomuser.me/api/portraits/women/11.jpg"
+                    alt="User"
+                  />
+                </button>
+              </div>
+            </div>
+          </header>
+          <main class="flex-1 overflow-y-auto p-6 bg-gray-100">
+            <!-- Recent Bookings and Room Status -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+              <!-- Recent Bookings -->
+              <div
+                class="lg:col-span-2 bg-white rounded-lg shadow overflow-hidden"
+              >
+                <div class="overflow-x-auto">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                      <tr>
+                        <th
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Username
+                        </th>
+                        <th
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Role
+                        </th>
+                        <th
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Created At
+                        </th>
+                        <th
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Aksi
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <!-- Data User -->
+                    {% for user in users %}
+                    <tbody class="bg-white divide-y divide-gray-200">
+                      <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10">
+                              <img
+                                class="h-10 w-10 rounded-full"
+                                src="https://randomuser.me/api/portraits/men/32.jpg"
+                                alt=""
+                              />
+                            </div>
+                            <div class="ml-4">
+                              <div class="text-sm font-medium text-gray-900">
+                                {{ user.username }}
+                              </div>
+                              <div class="text-sm text-gray-500">
+                                {{ user.email }}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <div class="text-sm text-gray-900">
+                            {{ user.role }}
+                          </div>
+                        </td>
+                        <td
+                          class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                        >
+                          {{ user.date_joined }}
+                        </td>
+                        <td
+                          class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                        >
+                          <a href="{% url 'update_user' user.id %}">Update</a> |
+                          <a
+                            href="{% url 'delete_user' user.id %}"
+                            onclick="return confirm('Yakin mau hapus?')"
+                            >Hapus</a
+                          >
+                        </td>
+                      </tr>
+                    </tbody>
+                    {% endfor %}
+                  </table>
+                </div>
+              </div>
+            </div>
+          </main>
+        </section>
+
+        <!-- Section Billing -->
+        <section id="billing" class="content-section hidden">
+          <header
+            class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200"
+          >
+            <div class="flex items-center">
+              <h1 class="text-xl font-semibold text-gray-800">Billing</h1>
+            </div>
+          </header>
+
+          <main class="flex-1 overflow-y-auto p-6 bg-gray-100">
+            <div class="bg-white rounded-lg shadow overflow-hidden">
+              <div class="px-6 py-4 border-b border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-800">
+                  Approve Pembayaran
+                </h2>
+              </div>
+
+              <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th
+                        class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                      >
+                        Username
+                      </th>
+                      <th
+                        class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                      >
+                        Email
+                      </th>
+                      <th
+                        class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                      >
+                        Status
+                      </th>
+                      <th
+                        class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                      >
+                        Bukti
+                      </th>
+                      <th
+                        class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                      >
+                        Aksi
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for billing in billing_users %}
+                    <tr
+                      class="{% if billing.status_pembayaran %}bg-gray-100{% endif %}"
+                    >
+                      <td class="px-4 py-2">{{ billing.user.username }}</td>
+                      <td class="px-4 py-2">{{ billing.user.email }}</td>
+                      <td class="px-4 py-2">
+                        {% if billing.status_pembayaran %}
+                        <span
+                          class="px-2 py-1 text-xs font-semibold rounded bg-green-100 text-green-800"
+                          >Lunas</span
+                        >
+                        {% else %}
+                        <span
+                          class="px-2 py-1 text-xs font-semibold rounded bg-yellow-100 text-yellow-800"
+                          >Belum Lunas</span
+                        >
+                        {% endif %}
+                      </td>
+                      <td class="px-4 py-2">
+                        <img
+                          src="{{ billing.bukti_pembayaran.url }}"
+                          alt="Bukti"
+                          class="w-16 h-16 object-cover rounded cursor-pointer"
+                          onclick="showPopup('{{ billing.bukti_pembayaran.url }}')"
+                        />
+                      </td>
+                      <td class="px-4 py-2">
+                        {% if billing.status_pembayaran %}
+                        <button
+                          class="bg-gray-300 text-gray-600 cursor-not-allowed px-3 py-1 rounded"
+                          disabled
+                        >
+                          Approved
+                        </button>
+                        {% else %}
+                        <a
+                          href="{% url 'approve_pembayaran' billing.user.id %}"
+                          class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"
+                          >Approve</a
+                        >
+                        {% endif %}
+                      </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="5" class="text-center py-4 text-gray-500">
+                        Belum ada pembayaran
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </main>
+
+          <!-- Modal popup -->
+          <div
+            id="popupModal"
+            class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-50"
+          >
+            <div
+              class="relative bg-white rounded-lg shadow-lg max-w-3xl w-full"
+            >
+              <button
+                onclick="closePopup()"
+                class="absolute top-2 right-2 bg-gray-100 hover:bg-gray-200 rounded-full p-2 text-gray-600 hover:text-red-600"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+              <img
+                id="popupImage"
+                src=""
+                alt="Preview Bukti"
+                class="w-full h-auto rounded-b-lg"
+              />
+            </div>
+          </div>
+        </section>
+
+        <!-- Section Settings -->
+        <section id="settings" class="content-section hidden">
+          <header
+            class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200"
+          >
+            <div class="flex items-center">
+              <button class="md:hidden text-gray-500 focus:outline-none">
+                <i class="fas fa-bars"></i>
+              </button>
+              <h1 class="text-xl font-semibold text-gray-800 ml-4">Settings</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+              <button class="text-gray-500 focus:outline-none">
+                <i class="fas fa-bell"></i>
+              </button>
+              <button class="text-gray-500 focus:outline-none">
+                <i class="fas fa-envelope"></i>
+              </button>
+              <div class="relative">
+                <button class="flex items-center focus:outline-none">
+                  <img
+                    class="w-8 h-8 rounded-full"
+                    src="https://randomuser.me/api/portraits/women/11.jpg"
+                    alt="User"
+                  />
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <h2 class="text-xl font-bold mb-4">Settings</h2>
+          <p>Pengaturan akun dan sistem.</p>
+        </section>
+      </main>
+
+      <!-- Main Content -->
+    </div>
+  </body>
+</html>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const links = document.querySelectorAll(".sidebar-link");
+    const sections = document.querySelectorAll(".content-section");
+
+    links.forEach((link) => {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        // Hapus highlight di sidebar
+        links.forEach((l) => l.classList.remove("bg-blue-700"));
+
+        // Tambahkan highlight di link aktif
+        this.classList.add("bg-blue-700");
+
+        // Sembunyikan semua section
+        sections.forEach((section) => section.classList.add("hidden"));
+
+        // Tampilkan section yang sesuai
+        const sectionId = this.getAttribute("data-section");
+        document.getElementById(sectionId).classList.remove("hidden");
+        // debug
+        console.log("Clicked section:", sectionId);
+      });
+    });
+  });
+
+  function showPopup(imageUrl) {
+    document.getElementById("popupImage").src = imageUrl;
+    document.getElementById("popupModal").classList.remove("hidden");
+    document.getElementById("popupModal").classList.add("flex");
+  }
+
+  function closePopup() {
+    document.getElementById("popupModal").classList.add("hidden");
+    document.getElementById("popupModal").classList.remove("flex");
+  }
+</script>

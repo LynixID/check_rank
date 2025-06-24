@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% extends 'core/base.html' %}
+
+{% block content %}
+<h2>Update User</h2>
+
+<form method="post">
+  {% csrf_token %}
+
+  <label for="username">Username</label><br>
+  <input type="text" name="username" value="{{ user_obj.username }}" required><br><br>
+
+  <label for="email">Email</label><br>
+  <input type="email" name="email" value="{{ user_obj.email }}" required><br><br>
+
+  <label for="whatsapp">WhatsApp Number</label><br>
+  <input type="text" name="whatsapp" value="{{ user_obj.whatsapp_number }}"><br><br>
+
+  <label for="role">Role</label><br>
+  <select name="role">
+    <option value="user" {% if user_obj.role == 'user' %}selected{% endif %}>User</option>
+    <option value="admin" {% if user_obj.role == 'admin' %}selected{% endif %}>Admin</option>
+  </select><br><br>
+
+  <button type="submit">Update</button>
+  <a href="{% url 'dashboard' %}">Kembali</a>
+</form>
+{% endblock %}
+
+</body>
+</html>

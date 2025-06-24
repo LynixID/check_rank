@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Pembayaran</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex justify-center items-center p-4">
+  <div class="bg-white rounded-xl shadow-xl p-8 w-full max-w-md">
+    <h2 class="text-2xl font-bold text-blue-600 mb-4">Pembayaran</h2>
+    <p class="mb-2">Silakan transfer sebesar:</p>
+    <p class="text-3xl font-bold text-blue-700 mb-4">Rp 199.000</p>
+
+    <form method="POST" enctype="multipart/form-data" class="space-y-4">
+      {% csrf_token %}
+      <div>
+        <label class="block mb-1 text-sm font-medium text-gray-700">Metode Pembayaran</label>
+        <select name="metode" class="w-full border border-gray-300 rounded p-2" required>
+          <option value="">Pilih Metode</option>
+          <option value="BCA">BCA - 123456789</option>
+          <option value="Mandiri">Mandiri - 987654321</option>
+          <option value="Gopay">Gopay - 08123456789</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block mb-1 text-sm font-medium text-gray-700">Upload Bukti Transfer</label>
+        <input type="file" name="bukti" accept="image/*" class="w-full border border-gray-300 rounded p-2" required>
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">Kirim Bukti</button>
+    </form>
+  </div>
+</body>
+</html>

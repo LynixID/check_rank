@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-100">
+
+<div class="flex min-h-screen">
+  <!-- SIDEBAR -->
+  <div class="w-64 bg-blue-800 text-white flex flex-col">
+    <div class="p-4 text-xl font-bold bg-blue-900">Admin Panel</div>
+
+    <nav class="flex-1 p-2 space-y-1">
+      <a hx-get="{% url 'dashboard_section' 'stats' %}" hx-target="#main-content" hx-swap="innerHTML"
+         data-section="stats"
+         class="sidebar-link flex items-center px-4 py-2 rounded hover:bg-blue-700">
+        <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+      </a>
+      <a hx-get="{% url 'dashboard_section' 'users' %}" hx-target="#main-content" hx-swap="innerHTML"
+         data-section="users"
+         class="sidebar-link flex items-center px-4 py-2 rounded hover:bg-blue-700">
+        <i class="fas fa-users mr-2"></i> Users
+      </a>
+      <a hx-get="{% url 'dashboard_section' 'billing' %}" hx-target="#main-content" hx-swap="innerHTML"
+         data-section="billing"
+         class="sidebar-link flex items-center px-4 py-2 rounded hover:bg-blue-700">
+        <i class="fas fa-file-invoice-dollar mr-2"></i> Billing
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-blue-700">
+      <div>
+        <p class="text-sm font-medium">{{ request.user.username }}</p>
+        <a href="{% url 'logout' %}" class="text-xs underline text-blue-200">Logout</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="flex-1 p-6" id="main-content">
+    {% include 'core/dashboard_stats.html' %}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const links = document.querySelectorAll('.sidebar-link');
+
+    links.forEach(link => {
+      link.addEventListener('click', function () {
+        links.forEach(l => l.classList.remove('bg-blue-700'));
+        this.classList.add('bg-blue-700');
+      });
+    });
+
+    // Optional: set active on load based on URL or default
+    const current = document.querySelector('.sidebar-link[data-section="stats"]');
+    current?.classList.add('bg-blue-700');
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,176 @@
+<div class="bg-white shadow rounded-xl p-6">
+  <div
+    class="flex flex-col md:flex-row md:items-center md:justify-between mb-4"
+  >
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800">User List</h2>
+      <p class="text-sm text-gray-500">
+        Manage users, their status, and remove them securely.
+      </p>
+    </div>
+    <div class="mt-3 md:mt-0">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search users..."
+        class="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200 text-sm" id="userTable">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-4 py-3 text-left font-semibold text-gray-600">
+            Username
+          </th>
+          <th class="px-4 py-3 text-left font-semibold text-gray-600">Email</th>
+          <th class="px-4 py-3 text-left font-semibold text-gray-600">
+            WhatsApp
+          </th>
+          <th class="px-4 py-3 text-left font-semibold text-gray-600">Role</th>
+          <th class="px-4 py-3 text-left font-semibold text-gray-600">
+            Date Joined
+          </th>
+          <th class="px-4 py-3 text-left font-semibold text-gray-600">
+            Status
+          </th>
+          <th class="px-4 py-3 text-left font-semibold text-gray-600">
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-100">
+        {% for user in users %}
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3">{{ user.username }}</td>
+          <td class="px-4 py-3">{{ user.email }}</td>
+          <td class="px-4 py-3">{{ user.whatsapp_number|default:"-" }}</td>
+          <td class="px-4 py-3 capitalize">{{ user.role }}</td>
+          <td class="px-4 py-3">{{ user.date_joined|date:"Y-m-d H:i" }}</td>
+          <td class="px-4 py-3">
+            {% if user.is_active %}
+            <span
+              class="inline-flex items-center px-2 py-1 rounded bg-green-100 text-green-700 font-medium"
+              >Active</span
+            >
+            {% else %}
+            <span
+              class="inline-flex items-center px-2 py-1 rounded bg-red-100 text-red-700 font-medium"
+              >Inactive</span
+            >
+            {% endif %}
+          </td>
+          <td class="px-4 py-3 space-x-1">
+            {% if user.is_active %}
+            <button
+              onclick="openModal('deactivate', '{{ user.username }}', `{% url 'update_user_status' user.id 'deactivate' %}`)"
+              class="px-2 py-1 text-xs bg-yellow-400 hover:bg-yellow-500 text-white rounded"
+            >
+              Deactivate
+            </button>
+            {% else %}
+            <button
+              onclick="openModal('activate', '{{ user.username }}', `{% url 'update_user_status' user.id 'activate' %}`)"
+              class="px-2 py-1 text-xs bg-green-500 hover:bg-green-600 text-white rounded"
+            >
+              Activate
+            </button>
+            {% endif %}
+            <button
+              onclick="openModal('delete', '{{ user.username }}', `{% url 'delete_user' user.id %}`)"
+              class="px-2 py-1 text-xs bg-red-500 hover:bg-red-600 text-white rounded"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7" class="px-4 py-4 text-center text-gray-500">
+            No users found.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Confirm Modal -->
+<div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 transition-opacity duration-300">
+  <div class="bg-white rounded-lg shadow-2xl p-6 w-full max-w-sm transform scale-95 transition-transform duration-300">
+    <div class="flex items-center mb-4">
+      <div class="flex-shrink-0">
+        <svg id="modalIcon" class="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1 4h1m-2-4h.01M12 9v2m0-2H9m3 0h3m-3 0V7m0 2v2" />
+        </svg>
+      </div>
+      <h3 id="modalTitle" class="ml-3 text-lg font-semibold text-gray-800">Confirm Action</h3>
+    </div>
+    <p id="modalMessage" class="text-sm text-gray-600 mb-4">Are you sure you want to proceed?</p>
+    <div class="flex justify-end space-x-2">
+      <button onclick="closeModal()" class="px-3 py-1.5 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-md transition">Cancel</button>
+      <a id="modalConfirmBtn" href="#" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition">Yes, proceed</a>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function openModal(action, username, url) {
+    const modal = document.getElementById("confirmModal");
+    const title = document.getElementById("modalTitle");
+    const message = document.getElementById("modalMessage");
+    const confirmBtn = document.getElementById("modalConfirmBtn");
+    const icon = document.getElementById("modalIcon");
+
+    // Set default icon and color
+    icon.className = "h-6 w-6";
+
+    if (action === "delete") {
+      title.textContent = "Delete User";
+      message.textContent = `Are you sure you want to delete user "${username}"?`;
+      confirmBtn.className = "px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-md transition";
+      icon.classList.add("text-red-600");
+      icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />`;
+    } else if (action === "activate") {
+      title.textContent = "Activate User";
+      message.textContent = `Are you sure you want to activate user "${username}"?`;
+      confirmBtn.className = "px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-md transition";
+      icon.classList.add("text-green-600");
+      icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />`;
+    } else if (action === "deactivate") {
+      title.textContent = "Deactivate User";
+      message.textContent = `Are you sure you want to deactivate user "${username}"?`;
+      confirmBtn.className = "px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md transition";
+      icon.classList.add("text-yellow-500");
+      icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1 4h1m-2-4h.01M12 9v2m0-2H9m3 0h3m-3 0V7m0 2v2" />`;
+    }
+
+    confirmBtn.href = url;
+    modal.classList.remove("hidden");
+    modal.firstElementChild.classList.remove("scale-95");
+    modal.firstElementChild.classList.add("scale-100");
+  }
+
+  function closeModal() {
+    const modal = document.getElementById("confirmModal");
+    modal.firstElementChild.classList.add("scale-95");
+    modal.firstElementChild.classList.remove("scale-100");
+    setTimeout(() => {
+      modal.classList.add("hidden");
+    }, 200); // biar animasi smooth
+  }
+
+  // Search filter
+  document.getElementById("searchInput").addEventListener("keyup", function () {
+    const value = this.value.toLowerCase();
+    const rows = document.querySelectorAll("#userTable tbody tr");
+    rows.forEach((row) => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(value) ? "" : "none";
+    });
+  });
+</script>

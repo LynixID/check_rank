@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>RankChecker</title>
+    <meta name="description" content="Alat cek rank SEO Google" />
+    <meta name="keywords" content="SEO, Rank, Google" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="p-8">
+    <div class="bg-white">
+      <header class="absolute inset-x-0 top-0 z-50 py-4 lg:py-5">
+        <nav
+          class="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8"
+        >
+          <div class="flex lg:flex-1">
+            <a href="#" class="-m-1.5 p-1.5">
+              <span class="sr-only">Your Company</span>
+              <img
+                class="h-8 w-auto"
+                src="https://htmlwind.com/assets/images/logo/logoipsum-accent-283.svg"
+                alt=""
+              />
+            </a>
+          </div>
+          <div class="lg:hidden">
+            <button
+              id="open-menu"
+              type="button"
+              class="-m-2.5 flex items-center justify-center rounded-lg p-2.5 text-gray-700"
+            >
+              <span class="sr-only">Open main menu</span>
+              <svg
+                class="h-6 w-6"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 6H20M4 12H20M4 18H20"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="hidden lg:flex lg:gap-x-8">
+            <a href="#" class="text-sm font-semibold leading-6 text-gray-700"
+              >Features</a
+            >
+            <a href="#" class="text-sm font-semibold leading-6 text-gray-700"
+              >Services</a
+            >
+            <a href="#" class="text-sm font-semibold leading-6 text-gray-700"
+              >Pricing</a
+            >
+            <a href="#" class="text-sm font-semibold leading-6 text-gray-700"
+              >About</a
+            >
+          </div>
+          <div
+            class="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:gap-x-3"
+          >
+            <a
+              href="{% url 'login' %}"
+              class="inline-block rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-gray-900"
+              >Login</a
+            >
+            <a
+              href="{% url 'register' %}"
+              class="inline-block rounded-md bg-sky-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-pink-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
+              >Sign up</a
+            >
+          </div>
+        </nav>
+        <div id="mobile-menu" class="lg:hidden" role="dialog" aria-modal="true">
+          <div id="backdrop" class="fixed inset-0 z-50"></div>
+          <div
+            class="fixed inset-0 z-50 w-full bg-white sm:left-auto sm:right-0 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10"
+          >
+            <div class="flex items-center justify-between px-6 py-4">
+              <a href="#" class="-m-1.5 p-1.5">
+                <span class="sr-only">Your Company</span>
+                <img
+                  class="h-8 w-auto"
+                  src="https://htmlwind.com/assets/images/logo/logoipsum-accent-283.svg"
+                  alt=""
+                />
+              </a>
+              <button
+                id="close-menu"
+                type="button"
+                class="-m-2.5 flex items-center justify-center rounded-lg p-2.5 text-gray-700"
+              >
+                <span class="sr-only">Close menu</span>
+                <svg
+                  class="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M19 5L4.99998 19M5.00001 5L19 19"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div class="divide-y divide-gray-900/10 px-6">
+              <div class="space-y-0.5 py-5">
+                <a
+                  href="#"
+                  class="-mx-3 block rounded-lg px-4 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  >Features</a
+                >
+                <a
+                  href="#"
+                  class="-mx-3 block rounded-lg px-4 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  >Services</a
+                >
+                <a
+                  href="#"
+                  class="-mx-3 block rounded-lg px-4 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  >Pricing</a
+                >
+                <a
+                  href="#"
+                  class="-mx-3 block rounded-lg px-4 py-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  >About</a
+                >
+              </div>
+              <div class="space-y-3 py-6">
+                <a
+                  href="{% url 'register' %}"
+                  class="block rounded-md bg-pink-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-pink-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-500"
+                >
+                  Sign up
+                </a>
+                <a
+                  href="{% url 'login' %}"
+                  class="block rounded-md bg-white px-3.5 py-2.5 text-center text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-gray-900"
+                >
+                  Login
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="relative isolate overflow-hidden pt-12 lg:pt-16">
+        <div
+          aria-hidden="true"
+          class="absolute -top-[40rem] left-1/2 -z-10 h-[80rem] w-[80rem] -translate-x-1/2 rounded-full bg-[image:linear-gradient(to_right,_#e2e8f0_1px,_transparent_1px),_linear-gradient(to_bottom,_#e2e8f0_1px,_transparent_1px)] bg-[length:70px_70px] [mask-image:radial-gradient(circle,#000_10%,transparent_70%)]"
+        ></div>
+        <div class="px-6 lg:px-8">
+          <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+            <div class="sm:text-center">
+              <h1
+                class="text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-6xl"
+              >
+                Optimalkan SEO, Cek Ranking Website!
+              </h1>
+              <p class="mt-6 text-lg leading-8 text-gray-600">
+                Temukan posisi website Anda di Google dengan cepat dan akurat.
+                Pantau performa URL dan tingkatkan visibilitas bisnis Anda!
+              </p>
+            </div>
+
+            <div
+              class="mt-10 flex items-center justify-start gap-6 sm:justify-center"
+            >
+              <a
+                href="#"
+                class="inline-flex items-center justify-center gap-2 rounded-md bg-sky-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-pink-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-500"
+              >
+                <svg
+                  class="h-5 w-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M10.9 8.8L10.6577 8.66152C10.1418 8.36676 9.5 8.73922 9.5 9.33333L9.5 14.6667C9.5 15.2608 10.1418 15.6332 10.6577 15.3385L10.9 15.2L15.1 12.8C15.719 12.4463 15.719 11.5537 15.1 11.2L10.9 8.8Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                Demo
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

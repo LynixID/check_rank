@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Akun Belum Aktif</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 flex items-center justify-center min-h-screen">
+
+  <div class="bg-white shadow-lg rounded-lg p-8 max-w-md text-center">
+    <div class="mb-4">
+      <svg class="w-16 h-16 mx-auto text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856C18.07 18.44 19 16.3 19 14a7 7 0 10-14 0c0 2.3.93 4.44 2.062 6z" />
+      </svg>
+    </div>
+    <h1 class="text-2xl font-bold text-blue-700 mb-2">Akun Belum Aktif</h1>
+    <p class="text-gray-600 mb-4">
+      Akun Anda saat ini belum aktif. Silakan tunggu konfirmasi dari admin. Kami akan mengirimkan notifikasi ke WhatsApp Anda setelah akun aktif.
+    </p>
+    <a href="{% url 'logout' %}" class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+      Kembali ke Login
+    </a>
+  </div>
+
+</body>
+</html>
